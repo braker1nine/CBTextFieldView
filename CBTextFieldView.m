@@ -8,8 +8,6 @@
 
 #import "CBTextFieldView.h"
 
-#import "CBTextField.h"
-#import "CBSecureTextField.h"
 #import "CBLoginFieldCell.h"
 #import "CBSecureTextFieldCell.h"
 
@@ -110,15 +108,14 @@ bool hasFocus(id theField) {
     NSTextField *old = _textField;
     NSRect textRect = NSMakeRect(0, 0, self.frame.size.width, self.frame.size.height-20);
     if (_secure) {
-        //[CBSecureTextField setCellClass:[CBSecureTextFieldCell class]];
-        _textField = [[CBSecureTextField alloc] initWithFrame:textRect];
+        _textField = [[NSSecureTextField alloc] initWithFrame:textRect];
         CBSecureTextFieldCell *cell = [[CBSecureTextFieldCell alloc] initTextCell:@""];
         [cell setEditable:YES];
         [cell setEnabled:YES];
         [_textField setCell:cell];
     } else {
-        [CBTextField setCellClass:[CBLoginFieldCell class]];
-        _textField = [[CBTextField alloc] initWithFrame:textRect];
+        [NSTextField setCellClass:[CBLoginFieldCell class]];
+        _textField = [[NSTextField alloc] initWithFrame:textRect];
     }
     
     _textField.delegate = self;
@@ -157,13 +154,7 @@ bool hasFocus(id theField) {
 
 -(CGRect)_placeholderFrame
 {
-    CGRect ret;
-    //if ((_textField.stringValue != nil && _textField.stringValue.length > 0) || _selected) {
-    //    ret = CGRectMake(10, self.frame.size.height-20, self.frame.size.width-20, 20);
-    //} else {
-        ret = CGRectInset(NSRectToCGRect(_textField.frame), 10, 8);
-    //}
-    
+    CGRect ret = CGRectInset(NSRectToCGRect(_textField.frame), 10, 8);
     return ret;
 }
 
@@ -177,7 +168,6 @@ bool hasFocus(id theField) {
     positionAnimation.springSpeed = 12.0f;
     [_placeholderLayer pop_addAnimation:positionAnimation forKey:@"translation"];
     
-    //[_placeholderLayer setFrame:[self _placeholderFrame]];
 }
 
 
@@ -192,7 +182,6 @@ bool hasFocus(id theField) {
 
 -(void)_updateSelectedColorFrame
 {
-    //_selectedLayer.frame = [self _selectedColorFrame];
     POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerBounds];
     positionAnimation.toValue = [NSValue valueWithCGRect:NSMakeRect(0, 0, [self _selectedColorWidth], _selectedLayer.bounds.size.height)];
     positionAnimation.springBounciness = 12.0f;
